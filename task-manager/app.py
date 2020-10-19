@@ -5,8 +5,8 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
-if os.path.exists("env.py"):
-    import env
+if os.path.exists("env_sample.py"):
+    import env_sample
 
 
 app = Flask(__name__)
@@ -23,6 +23,12 @@ mongo = PyMongo(app)
 def get_tasks():
     tasks = list(mongo.db.tasks.find())
     return render_template("tasks.html", tasks=tasks)
+
+@app.route('/add_task')
+def add_task():
+    _categories = mongo.db.categories.find()
+    category_list = [category for category in _categories]
+    return render_template('addtask.html', categories = category_list)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -97,11 +103,6 @@ def logout():
     flash("You have been logged out")
     session.pop("user")
     return redirect(url_for("login"))
-
-
-@app.route("/add_task")
-def add_task():
-    return render_template("add_task.html")
 
 
 if __name__ == "__main__":
