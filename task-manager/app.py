@@ -28,7 +28,7 @@ def get_tasks():
 def add_task():
     _categories = mongo.db.categories.find()
     category_list = [category for category in _categories]
-    return render_template('add_task.html', categories = category_list)
+    return render_template('add_task.html', categories=category_list)
 
 
 @app.route("/register", methods=["GET", "POST"])
